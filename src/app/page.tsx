@@ -1,11 +1,7 @@
 import Link from "next/link";
-const navItems = [
-  ["About", "/about"],
-  ["Reading & Books", "/reading"],
-  ["Blog", "/blog"],
-  ["Events", "/events"],
-  ["Community", "/community"],
-] as const;
+import SiteHeader from "@/components/site-header";
+import SiteFooter from "@/components/site-footer";
+
 
 const journey = [
   ["01", "READ", "Read", "Explore ideas and perspectives through shared reading."],
@@ -20,32 +16,12 @@ const discover = [
   ["03 / CONTRIBUTE", "Get involved", "Share your skills, volunteer or support our work.", "/get-involved"],
 ];
 
-function Brand({ footer = false }: { footer?: boolean }) {
-  return (
-    <Link
-      className={footer ? "footer-brand" : "brand"}
-      href="/"
-      aria-label="The Growth Circle home"
-    >
-      <span className="brand-name">THE GROWTH CIRCLE</span>
-      <span className="brand-tagline">READ. CONNECT. GROW.</span>
-    </Link>
-  );
-}
+
 
 export default function Home() {
   return (
     <main>
-      <header className="site-header">
-        <Brand />
-        <nav className="main-nav" aria-label="Main navigation">
-          {navItems.map(([label, href]) => <a href={href} key={label}>{label}</a>)}
-        </nav>
-        <div className="header-actions">
-          <a className="login-link" href="/login">Log in</a>
-          <a className="button button-dark button-small" href="/join">Join the Circle</a>
-        </div>
-      </header>
+      <SiteHeader />
 
       <section className="hero page-shell">
         <div className="hero-copy">
@@ -56,8 +32,8 @@ export default function Home() {
             share ideas, and turn what you learn into meaningful growth.
           </p>
           <div className="hero-actions">
-            <a className="button button-dark" href="/join">Become a member</a>
-            <a className="button button-outline" href="/community">Explore the community</a>
+            <Link className="button button-dark" href="/join">Become a member</Link>
+            <Link className="button button-outline" href="/community">Explore the community</Link>
           </div>
           <p className="hero-path">READ <span>→</span> THINK <span>→</span> DISCUSS <span>→</span> APPLY <span>→</span> GROW</p>
         </div>
@@ -115,7 +91,7 @@ export default function Home() {
               and support one another’s growth. Everyone has something to learn,
               and everyone has something to contribute.
             </p>
-            <a className="button button-outline button-compact" href="/community">Discover our community</a>
+            <Link className="button button-outline button-compact" href="/community">Discover our community</Link>
           </div>
         </div>
       </section>
@@ -133,7 +109,7 @@ export default function Home() {
             <p className="eyebrow eyebrow-light">OUR READING PROGRAMME</p>
             <h3>Read. Reflect. Grow.</h3>
             <p>Our reading sessions create room to explore meaningful ideas, ask better questions and learn from one another.</p>
-            <a className="button button-light" href="/reading">Explore reading programmes</a>
+            <Link className="button button-light" href="/reading">Explore reading programmes</Link>
           </div>
           <div className="reading-decoration" aria-hidden="true">READ<br />THINK<br />GROW</div>
         </div>
@@ -143,16 +119,20 @@ export default function Home() {
         <div className="page-shell">
           <p className="eyebrow">MORE FROM THE CIRCLE</p>
           <h2 className="section-heading">There is more to discover.</h2>
-          <div className="discover-grid">
-            {discover.map(([kicker, title, description, href]) => (
-              <a className="discover-card" href={href} key={kicker}>
-                <p className="card-kicker">{kicker}</p>
-                <h3>{title}</h3>
-                <p>{description}</p>
-                <span className="card-arrow">Explore <b>↗</b></span>
-              </a>
-            ))}
-          </div>
+       
+<div className="discover-grid">
+  {discover.map(([kicker, title, description, href]) => (
+    <Link className="discover-card" href={href} key={kicker}>
+      <p className="card-kicker">{kicker}</p>
+      <h3>{title}</h3>
+      <p>{description}</p>
+      <span className="card-arrow">
+        Explore <b>↗</b>
+      </span>
+    </Link>
+  ))}
+</div>
+
         </div>
       </section>
 
@@ -160,17 +140,10 @@ export default function Home() {
         <p className="eyebrow eyebrow-light">YOUR NEXT CHAPTER STARTS HERE</p>
         <h2>Come grow with us.</h2>
         <p>Bring your curiosity. Share your perspective. Be part of a community that grows together.</p>
-        <a href="/join" className="cta-link">Join the Growth Circle <span>→</span></a>
+        <Link href="/join" className="cta-link">Join the Growth Circle <span>→</span></Link>
       </section>
 
-      <footer className="site-footer">
-        <Brand footer />
-        <nav className="footer-nav" aria-label="Footer navigation">
-          <a href="/about">About</a><a href="/reading">Reading</a><a href="/blog">Blog</a>
-          <a href="/events">Events</a><a href="/community">Community</a><a href="/contact">Contact</a>
-        </nav>
-        <span className="copyright">© {new Date().getFullYear()} The Growth Circle</span>
-      </footer>
+      <SiteFooter />
     </main>
   );
 }
