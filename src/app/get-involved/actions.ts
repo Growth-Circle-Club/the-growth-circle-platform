@@ -44,46 +44,6 @@ export async function submitMembershipApplication(
 
   const supabase = await createClient();
 
-  // Check whether this email already has an application.
-  const { data: existingApplications, error: lookupError } = await supabase
-    .from("membership_applications")
-    .select("id, status")
-    .eq("email", email);
-
-  if (lookupError) {
-    console.error("Application lookup failed:", lookupError);
-
-    return {
-      status: "error",
-      message: "We couldn't process your application. Please try again.",
-    };
-  }
-
-  const pendingApplications =
-    existingApplications?.filter((application) => application.status === "pending") ?? [];
-
-  if (pendingApplications.length > 1) {
-    return {
-      status: "error",
-      message:
-        "We found multiple pending applications for this email. Please contact the Growth Circle team for assistance.",
-    };
-  }
-
-  if (pendingApplications.length === 1) {
-    redirect(
-      `/signup?name=${encodeURIComponent(fullName)}&email=${encodeURIComponent(email)}`
-    );
-  }
-
-  if (existingApplications && existingApplications.length > 0) {
-    return {
-      status: "error",
-      message:
-        "An application with this email has already been reviewed. Please contact the Growth Circle team if you need assistance.",
-    };
-  }
-
   const { error } = await supabase
     .from("membership_applications")
     .insert({
@@ -100,7 +60,7 @@ export async function submitMembershipApplication(
 
     return {
       status: "error",
-      message: "We couldn't submit your application. Please try again.",
+      message: "We couldn't process your application. Please try again.",
     };
   }
 
