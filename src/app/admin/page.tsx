@@ -5,6 +5,7 @@ import AdminSidebar from "./admin-sidebar";
 import LogoutButton from "./logout-button";
 import Link from "next/link";
 
+export const instant = false;
 const dashboardSections = [
   {
     title: "Membership Applications",

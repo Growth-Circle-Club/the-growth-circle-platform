@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { registerForFreeEvent } from "./actions";
 
+export const instant = false;
 type EventDetailsProps = {
   params: Promise<{ id: string }>;
   searchParams: Promise<{

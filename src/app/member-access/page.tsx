@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import SignOutButton from "@/app/member/components/sign-out-button";
+export const instant = false;
 export default async function MemberAccessPage({searchParams}:{searchParams:Promise<{status?:string}>}){const supabase=await createClient();const {data,error}=await supabase.auth.getClaims();if(error||!data?.claims?.sub)redirect("/login");const {data:profile}=await supabase.from("profiles").select("member_status").eq("id",data.claims.sub).maybeSingle();const params=await searchParams;const status=profile?.member_status??params.status??"unavailable";
   const title=status==="suspended"?"Your membership is currently paused":status==="pending"?"Your membership is awaiting approval":"We could not confirm your membership";
   const message=status==="suspended"?"Please contact The Growth Circle team if you believe this is a mistake or need an update.":status==="pending"?"Your account is created, but member portal access will become available once your membership has been approved.":"Please contact the community team for help accessing your member account.";

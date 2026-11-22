@@ -2,7 +2,7 @@
 import SectionHeading from "../components/section-heading";
 import { requireActiveMember } from "@/lib/member";
 import { submitDiscussionContribution } from "./actions";
-
+export const instant = false;
 export default async function MemberDiscussionsPage() {
   const { supabase } = await requireActiveMember();
 

@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { requireActiveMember } from "@/lib/member";
 import SectionHeading from "./components/section-heading";
-
+export const instant = false;
 function dateLabel(value: string) {
   return new Date(`${value}T12:00:00`).toLocaleDateString("en-NG", {
     weekday: "short",

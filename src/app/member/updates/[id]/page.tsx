@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import SectionHeading from "../../components/section-heading";
 import { requireActiveMember } from "@/lib/member";
-
+export const instant = false;
 export default async function MemberUpdateDetailPage({
   params,
 }: {

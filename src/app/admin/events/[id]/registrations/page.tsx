@@ -4,6 +4,7 @@ import RegistrationsExport from "./registrations-export";
 import { requireAdminPermission } from "@/lib/admin";
 import AdminSidebar from "../../../admin-sidebar";
 
+export const instant = false;
 type RegistrationsPageProps = {
   params: Promise<{ id: string }>;
 };

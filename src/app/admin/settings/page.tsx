@@ -2,6 +2,8 @@ import { requireAdminPermission } from "@/lib/admin";
 import AdminSidebar from "../admin-sidebar";
 import { saveSetting, deleteSetting } from "./actions";
 
+export const instant = false;
+
 const input = "w-full rounded-lg border border-[#DDE2D8] bg-white px-3 py-2 text-sm text-[#1D382A]";
 const button = "rounded-lg bg-[#1D382A] px-4 py-2 text-sm font-semibold text-white hover:bg-[#31543D]";
 const muted = "text-sm text-[#758078]";

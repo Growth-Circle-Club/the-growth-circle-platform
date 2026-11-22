@@ -4,6 +4,7 @@ import AdminSidebar from "../admin-sidebar";
 import { updateMemberStatus } from "./actions";
 import { connection } from "next/server";
 
+export const instant = false;
 type MembersPageProps = {
   searchParams: Promise<{
     search?: string;

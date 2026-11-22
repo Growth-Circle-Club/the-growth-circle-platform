@@ -2,7 +2,7 @@
 import Image from "next/image";
 import SectionHeading from "../components/section-heading";
 import { requireActiveMember } from "@/lib/member";
-
+export const instant = false;
 function dateLabel(value?: string | null) {
   return value
     ? new Date(`${value.slice(0, 10)}T12:00:00`).toLocaleDateString("en-NG", {

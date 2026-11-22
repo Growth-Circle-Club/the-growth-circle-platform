@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-
+export const instant = false;
 export default async function MemberEventsPage() {
   const supabase = await createClient();
 

@@ -3,7 +3,7 @@ import AdminSidebar from "../../admin-sidebar";
 import { createEvent } from "../actions";
 import PaymentFields from "./payment-field";
 import EventImageUpload from "./event-image-upload";
-
+export const instant = false;
 <EventImageUpload />
 type NewEventPageProps = {
   searchParams: Promise<{ error?: string }>;

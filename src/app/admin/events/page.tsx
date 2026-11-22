@@ -3,6 +3,7 @@ import Link from "next/link";
 import { requireAdminPermission } from "@/lib/admin";
 import AdminSidebar from "../admin-sidebar";
 
+export const instant = false;
 export default async function EventsPage() {
   const supabase = await requireAdminPermission("events.manage");
 

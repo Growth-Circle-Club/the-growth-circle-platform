@@ -2,6 +2,7 @@ import SectionHeading from "../components/section-heading";
 import { requireActiveMember } from "@/lib/member";
 import { updateMemberProfile } from "./actions";
 import ProfilePhotoUpload from "./profile-photo-upload";
+export const instant = false;
 export default async function MemberProfilePage(){const {profile}=await requireActiveMember();return <>
   <SectionHeading eyebrow="YOUR DETAILS" title="My profile" description="Keep your details up to date so the community can get to know you."/>
   <div className="member-grid member-grid-2">

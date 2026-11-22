@@ -2,6 +2,7 @@
 import Link from "next/link";
 import SignupForm from "./signup-form";
 
+export const instant = false;
 export default async function SignupPage({
   searchParams,
 }: {

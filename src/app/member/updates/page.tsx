@@ -4,13 +4,15 @@ import Link from "next/link";
 import SectionHeading from "../components/section-heading";
 import { requireActiveMember } from "@/lib/member";
 
+export const instant = false;
+
 export default async function MemberUpdatesPage() {
   const { supabase } = await requireActiveMember();
 
   const { data: posts } = await supabase
     .from("content_posts")
     .select(
-      "id,title,excerpt,content_type,published_at,cover_image_url",
+      "id,title,excerpt,content_type,published_at,cover_image_url"
     )
     .eq("status", "published")
     .order("published_at", { ascending: false });
