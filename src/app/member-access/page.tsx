@@ -1,0 +1,8 @@
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import SignOutButton from "@/app/member/components/sign-out-button";
+export default async function MemberAccessPage({searchParams}:{searchParams:Promise<{status?:string}>}){const supabase=await createClient();const {data,error}=await supabase.auth.getClaims();if(error||!data?.claims?.sub)redirect("/login");const {data:profile}=await supabase.from("profiles").select("member_status").eq("id",data.claims.sub).maybeSingle();const params=await searchParams;const status=profile?.member_status??params.status??"unavailable";
+  const title=status==="suspended"?"Your membership is currently paused":status==="pending"?"Your membership is awaiting approval":"We could not confirm your membership";
+  const message=status==="suspended"?"Please contact The Growth Circle team if you believe this is a mistake or need an update.":status==="pending"?"Your account is created, but member portal access will become available once your membership has been approved.":"Please contact the community team for help accessing your member account.";
+  return <main className="min-h-screen bg-[#f6f4ec] px-5 py-16"><section className="mx-auto max-w-xl rounded-2xl border border-[#e2e4dc] bg-white p-8 text-center shadow-sm"><p className="text-xs font-bold tracking-[.2em] text-[#6b825f]">THE GROWTH CIRCLE</p><h1 className="mt-5 font-[var(--font-playfair)] text-3xl font-bold text-[#1d382a]">{title}</h1><p className="mt-4 text-sm leading-7 text-[#778278]">{message}</p><div className="mt-7 flex justify-center"><SignOutButton/></div></section></main>;
+}

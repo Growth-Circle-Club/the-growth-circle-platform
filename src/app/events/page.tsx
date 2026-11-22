@@ -1,51 +1,160 @@
-import type { Metadata } from "next";
+
+import Image from "next/image";
 import Link from "next/link";
-import SiteHeader from "@/components/site-header";
-import SiteFooter from "@/components/site-footer";
+import { createClient } from "@/lib/supabase/server";
 
-export const metadata: Metadata = {
-  title: "Events | The Growth Circle",
-  description: "From community meetups to learning experiences, our events create opportunities to connect, share ideas and build relationships.",
-};
+export const instant = false;
 
-const features = [
-    { number: "01", title: "Community meetups", description: "Spend time together, build connections and continue conversations beyond reading sessions." },
-    { number: "02", title: "Learning experiences", description: "Take part in activities that encourage reflection, knowledge-sharing and practical growth." },
-    { number: "03", title: "Outreach", description: "Explore opportunities to share knowledge and encourage learning beyond our community." }
-];
+export default async function EventsPage() {
 
-export default function Page() {
+  const supabase = await createClient();
+
+  const { data: events, error } = await supabase
+    .from("events")
+    .select(
+      "id, title, description, event_type, starts_at, ends_at, venue, address, capacity, cover_image_url, payment_type, ticket_price_kobo, contribution_minimum_kobo",
+    )
+    .eq("status", "upcoming")
+    .in("visibility", ["public", "mixed"])
+    .order("starts_at", { ascending: true });
+
+  if (error) {
+    console.error("Public events fetch failed:", error.message);
+  }
+
   return (
-    <main>
-      <SiteHeader />
-      <section className="inner-hero page-shell">
-        <p className="eyebrow">LEARN · CONNECT · EXPERIENCE</p>
-        <h1>Good conversations deserve room beyond the page.</h1>
-        <p className="inner-hero-description">From community meetups to learning experiences, our events create opportunities to connect, share ideas and build relationships.</p>
-      </section>
+    <main className="min-h-screen bg-[#F6F4EC]">
+      <nav className="border-b border-[#E2E4DC] bg-white px-6 py-4">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4">
+          <Link
+            href="/"
+            className="font-[var(--font-playfair)] text-xl font-bold text-[#1D382A]"
+          >
+            The Growth Circle
+          </Link>
 
-      <section className="inner-content page-shell">
-        <p className="eyebrow">GROWING TOGETHER</p>
-        <h2 className="section-heading">Experiences that bring the community closer.</h2>
-        <p className="section-intro">We create spaces for members and friends of the Circle to meet, exchange ideas and enjoy learning together. Event announcements and registration details will be published here.</p>
-        <div className="inner-feature-grid">
-          {features.map((feature) => (
-            <article className="inner-feature-card" key={feature.number}>
-              <p className="card-kicker">{feature.number}</p>
-              <h3>{feature.title}</h3>
-              <p>{feature.description}</p>
-            </article>
-          ))}
+          <div className="flex items-center gap-5 text-sm font-medium">
+            <Link href="/" className="text-[#4F6F4A] hover:underline">
+              Home
+            </Link>
+            <Link href="/login" className="text-[#4F6F4A] hover:underline">
+              Sign in
+            </Link>
+          </div>
         </div>
-      </section>
+      </nav>
 
-      <section className="inner-cta">
-        <p className="eyebrow eyebrow-light">TAKE THE NEXT STEP</p>
-        <h2>Be part of the next gathering.</h2>
-        <p>Connect with the community to hear about upcoming events and ways to participate.</p>
-        <Link className="button button-light" href="/community">Discover the community</Link>
-      </section>
-      <SiteFooter />
+      <div className="px-6 py-16">
+        <div className="mx-auto max-w-6xl">
+          <header className="mb-12 text-center">
+            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-[#4F6F4A]">
+              The Growth Circle
+            </p>
+
+            <h1 className="font-[var(--font-playfair)] text-4xl font-bold text-[#1D382A] md:text-5xl">
+              Upcoming Events
+            </h1>
+
+            <p className="mx-auto mt-4 max-w-2xl text-[#758078]">
+              Connect, learn, share experiences and grow with us. Explore our
+              upcoming events and find one to be part of.
+            </p>
+          </header>
+
+          {!events || events.length === 0 ? (
+            <div className="rounded-2xl border border-[#E2E4DC] bg-white px-6 py-16 text-center">
+              <h2 className="font-[var(--font-playfair)] text-2xl font-semibold text-[#1D382A]">
+                No upcoming events yet
+              </h2>
+              <p className="mt-3 text-sm text-[#758078]">
+                Check back soon. We look forward to having you join us.
+              </p>
+            </div>
+          ) : (
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {events.map((event) => (
+                <article
+                  key={event.id}
+                  className="overflow-hidden rounded-2xl border border-[#E2E4DC] bg-white"
+                >
+                  {event.cover_image_url && (
+                    <Image
+                      src={event.cover_image_url}
+                      alt={event.title}
+                      width={800}
+                      height={450}
+                      unoptimized
+                      className="h-52 w-full object-cover"
+                    />
+                  )}
+
+                  <div className="p-6">
+                    <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#4F6F4A]">
+                      {event.event_type.replaceAll("_", " ")}
+                    </p>
+
+                    <Link
+                      href={`/events/${event.id}`}
+                      className="font-[var(--font-playfair)] text-2xl font-semibold text-[#1D382A] hover:text-[#4F6F4A]"
+                    >
+                      {event.title}
+                    </Link>
+
+                    <p className="mt-3 text-sm leading-6 text-[#758078]">
+                      {event.description ||
+                        "More details about this event will be shared soon."}
+                    </p>
+
+                    <div className="mt-6 space-y-2 text-sm text-[#35483D]">
+                      <p>
+                        <strong>Date:</strong>{" "}
+                        {new Date(event.starts_at).toLocaleString("en-NG", {
+                          dateStyle: "medium",
+                          timeStyle: "short",
+                        })}
+                      </p>
+
+                      <p>
+                        <strong>Venue:</strong>{" "}
+                        {event.venue || event.address || "To be announced"}
+                      </p>
+
+                      {event.capacity && (
+                        <p>
+                          <strong>Capacity:</strong> {event.capacity} people
+                        </p>
+                      )}
+
+                      <p>
+                        <strong>Payment:</strong>{" "}
+                        {event.payment_type === "paid"
+                          ? `₦${(
+                              (event.ticket_price_kobo ?? 0) / 100
+                            ).toLocaleString("en-NG")}`
+                          : event.payment_type === "optional_contribution"
+                            ? `Optional${
+                                event.contribution_minimum_kobo
+                                  ? ` (minimum ₦${(
+                                      event.contribution_minimum_kobo / 100
+                                    ).toLocaleString("en-NG")})`
+                                  : ""
+                              }`
+                            : "Free"}
+                      </p>
+                    </div>
+
+                    <div className="mt-6 border-t border-[#E2E4DC] pt-4">
+                      <span className="text-sm font-medium text-[#4F6F4A]">
+                        Open for registration
+                      </span>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
     </main>
   );
 }
