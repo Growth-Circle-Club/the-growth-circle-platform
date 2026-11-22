@@ -8,6 +8,7 @@ import {
   rejectMembershipApplication,
 } from "./actions";
 
+export const instant = false;
 const resultMessages: Record<string, string> = {
   approved: "Application approved. Membership is now active.",
   rejected: "Application rejected.",
